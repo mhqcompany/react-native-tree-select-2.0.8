@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { breadthFirstRecursion } from '../utils/menutransform';
+import {Checkbox} from "@ant-design/react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -120,6 +121,29 @@ export default class TreeSelect extends Component {
     });
   };
 
+
+  _onPressCollapse2 = ({ e, item }) => { // eslint-disable-line
+    const { data, selectType, leafCanBeSelected } = this.props;
+    const { currentNode } = this.state;
+    const routes = this._find(data, item.id);
+    this.setState((state) => {
+      const nodesStatus = new Map(state.nodesStatus);
+      nodesStatus.set(item && item.id, !nodesStatus.get(item && item.id)); // toggle
+      // // 计算currentNode的内容
+      if (selectType === 'multiple') {
+        if (leafCanBeSelected) {
+          return { nodesStatus };
+        }
+        return {  nodesStatus };
+      } else {
+        if (leafCanBeSelected) {
+          return { nodesStatus };
+        }
+        return { nodesStatus };
+      }
+    });
+  };
+
   _onClickLeaf = ({ e, item }) => { // eslint-disable-line
     const { onClickLeaf, onClick, selectType, leafCanBeSelected } = this.props;
     const { data } = this.props;
@@ -184,12 +208,14 @@ export default class TreeSelect extends Component {
       const isOpen = this.state.nodesStatus && this.state.nodesStatus.get(item && item.id) || false;
       return (
         <View>
-          <TouchableOpacity onPress={(e) => this._onPressCollapse({ e, item })} >
+          <TouchableOpacity onPress={(e) => this._onPressCollapse2({ e, item })} >
             <View style={{
               flexDirection: 'row',
               backgroundColor: !leafCanBeSelected && isCurrentNode ? selectedBackgroudColor || '#FFEDCE' : backgroudColor || '#fff',
               marginBottom: 2,
-              height: 30,
+              borderRadius: 6,
+              height: 36,
+              paddingLeft: 4,
               alignItems: 'center'
             }}
             >
@@ -197,6 +223,7 @@ export default class TreeSelect extends Component {
               {
                 isShowTreeId && <Text style={{ fontSize: 14, marginLeft: 4 }}>{item.id}</Text>
               }
+              <Checkbox  style={{marginRight: 6,marginLeft: 6}} checked={isCurrentNode} onChange={(e) => this._onClickLeaf({ e, item })}/>
               <Text style={[styles.textName, !leafCanBeSelected && isCurrentNode ?
                 { fontSize: selectedFontSize, color: selectedColor } : { fontSize, color }]}>{item.name}</Text>
             </View>
@@ -222,10 +249,13 @@ export default class TreeSelect extends Component {
           flexDirection: 'row',
           backgroundColor: isCurrentNode ? selectedBackgroudColor || '#FFEDCE' : backgroudColor || '#fff',
           marginBottom: 2,
-          height: 30,
+          borderRadius: 6,
+          paddingLeft: 4,
+          height: 36,
           alignItems: 'center'
         }}
         >
+          <Checkbox  style={{marginRight: 6,marginLeft: 6}} checked={isCurrentNode} onChange={(e) => this._onClickLeaf({ e, item })}/>
           <Text
             style={[styles.textName, isCurrentNode ?
               { fontSize: selectedFontSize, color: selectedColor } : { fontSize, color }]}
