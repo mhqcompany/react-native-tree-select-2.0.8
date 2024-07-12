@@ -214,7 +214,7 @@ export default class TreeSelect extends Component {
               backgroundColor: !leafCanBeSelected && isCurrentNode ? selectedBackgroudColor || '#FFEDCE' : backgroudColor || '#fff',
               marginBottom: 2,
               borderRadius: 6,
-              height: 36,
+              minHeight: 36,
               paddingLeft: 4,
               alignItems: 'center'
             }}
@@ -251,7 +251,7 @@ export default class TreeSelect extends Component {
           marginBottom: 2,
           borderRadius: 6,
           paddingLeft: 4,
-          height: 36,
+          minHeight: 36,
           alignItems: 'center'
         }}
         >
